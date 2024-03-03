@@ -63,7 +63,7 @@ const handleSubmit = (e) => {
       .then((data) => {
         console.log("Success:", data);
         alert("Quiz updated successfully")
-        navigate("/dashboard");
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -176,7 +176,7 @@ useEffect(() => {
           <button
             type="button"
             class="text-sm font-semibold leading-6 text-gray-900"
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/")}
           >
             Cancel
           </button>

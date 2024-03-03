@@ -19,11 +19,18 @@ const Login = () => {
     }
     axios.post(`${baseUrl}/login`, data)
       .then((res) => {
-        localStorage.setItem('token', res.data.token)
-        localStorage.setItem('user', JSON.stringify(res.data.data))
-        console.log(res.data.data)
-        
-        navigate('/dashboard')
+        console.log(res.data.data.role)
+        if(res.data.data.role !== 'admin') {
+          alert('Anda tidak memiliki akses')
+          return
+        } else {
+          localStorage.setItem('token', res.data.data.token)
+          localStorage.setItem('user', JSON.stringify(res.data.data))
+          // console.log(res.data.data)
+          
+          navigate('/')
+        }
+       
       })
       .catch((err) => {
         setError(err.response.data.message)
