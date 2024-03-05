@@ -2,18 +2,19 @@ import { useEffect, useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
+import config from "../../../config";
 
 const EditQuiz = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const baseUrl = "http://localhost:8080/v1/quizzes";
+  const baseUrl = config.BASE_URL;
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [quiz, setQuiz] = useState({});
 
   const fetchQuiz = () => {
     const id = window.location.pathname.split("/").pop();
-    fetch(`${baseUrl}/${id}`, {
+    fetch(`${baseUrl}/quizzes/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -22,7 +23,7 @@ const EditQuiz = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
+      
         setQuiz(data);
         if(data.data.waktu_mulai){
           setStartDate(new Date(data.data.waktu_mulai))
@@ -51,7 +52,7 @@ const handleSubmit = (e) => {
       waktu_selesai: end_date,
     };
     const id = window.location.pathname.split("/").pop();
-    fetch(`${baseUrl}/${id}`, {
+    fetch(`${baseUrl}/quizzes/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -61,7 +62,7 @@ const handleSubmit = (e) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
+      
         alert("Quiz updated successfully")
         navigate("/");
       })

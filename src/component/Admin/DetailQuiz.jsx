@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import axios from "axios";
-import eyeSvg from "../../assets/eye-svgrepo-com.svg";
 import editSvg from "../../assets/edit.svg";
 import deleteSvg from "../../assets/delete.svg";
+import config from "../../../config";
 
 function convertJawabanBenar(jawaban) {
   if (jawaban === 1) {
@@ -20,7 +20,7 @@ function convertJawabanBenar(jawaban) {
 const DetailQuiz = () => {
   const id = window.location.pathname.split("/").pop();
   const [quiz, setQuiz] = useState({});
-  const baseUrl = "http://localhost:8080/v1/quizzes";
+  const baseUrl = config.BASE_URL;
   const token = localStorage.getItem("token");
   const [activeOption, setActiveOption] = useState(null);
   const [activeOptionEdit, setActiveOptionEdit] = useState(null);
@@ -30,16 +30,16 @@ const DetailQuiz = () => {
 
   const handleCheckboxChange = (option) => {
     setActiveOption(option);
-    console.log(option);
+    
   };
 
   const handleCheckboxChangeEdit = (option) => {
     setActiveOptionEdit(option);
-    console.log(option);
+    
   }
 
   const fetchQuiz = () => {
-    fetch(`${baseUrl}/${id}`, {
+    fetch(`${baseUrl}/quizzes/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +49,7 @@ const DetailQuiz = () => {
       .then((response) => response.json())
       .then((data) => {
         setQuiz(data);
-        // console.log(data);
+      
         if (data.data.waktu_mulai) {
           setStartDate(new Date(data.data.waktu_mulai));
         }
@@ -63,18 +63,15 @@ const DetailQuiz = () => {
   };
 
   const fetchQuestions = () => {
-    
-    // console.log(id);
-    const myUrl = `http://localhost:8080/v1/questions/quiz/${id}`;
     axios
-      .get(myUrl, {
+      .get(`${baseUrl}/questions/quiz/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        console.log("Success:", response.data);
+       
         setQuestions(response.data.data)
       })
       .catch((error) => {
@@ -107,7 +104,7 @@ const DetailQuiz = () => {
       id_quiz: idQuiz,
     };
     axios
-      .post("http://localhost:8080/v1/questions", data, {
+      .post(`${baseUrl}/questions`, data, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -130,25 +127,17 @@ const DetailQuiz = () => {
   };
 
   const handlePertanyaanEdit = (e) => {
-    /*
-    {
-      "pertanyaan": "kamu updated",
-      "opsi_jawaban": "as~&qw~&er~&rtr",
-      "jawaban_benar": 3,
-      "id_quiz": 1
-  
-}
-*/
+   
     e.preventDefault();
     const newQuestionId = e.target['id-question'].value;
-    console.log(newQuestionId);
+   
     const pertanyaan = e.target['pertanyaan-edit'].value;
     const jawaban1 = e.target['jawaban1-edit'].value;
     const jawaban2 = e.target['jawaban2-edit'].value;
     const jawaban3 = e.target['jawaban3-edit'].value;
     const jawaban4 = e.target['jawaban4-edit'].value;
     const stringJawaban = `${jawaban1}~&${jawaban2}~&${jawaban3}~&${jawaban4}`;
-    console.log(stringJawaban)
+    
     const intId = parseInt(id);
     const jawabanBenar = activeOptionEdit;
     const data = {
@@ -157,9 +146,9 @@ const DetailQuiz = () => {
       jawaban_benar: jawabanBenar,
       id_quiz: intId,
     }
-    console.log(data)
+  
     axios
-      .put(`http://localhost:8080/v1/questions/${newQuestionId}`, data, {
+      .put(`${baseUrl}/questions/${newQuestionId}`, data, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -180,14 +169,14 @@ const DetailQuiz = () => {
     event.preventDefault();
     if(window.confirm("Apakah anda yakin ingin menghapus pertanyaan ini?")) {
       axios
-      .delete(`http://localhost:8080/v1/questions/${id}`, {
+      .delete(`${baseUrl}/questions/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        console.log("Success:", response);
+       
         alert("Pertanyaan berhasil dihapus");
         fetchQuestions();
       })
@@ -202,14 +191,14 @@ const DetailQuiz = () => {
   const fetchQuestion = (event, idQuestion) => {
     event.preventDefault();
     axios
-      .get(`http://localhost:8080/v1/questions/${idQuestion}`, {
+      .get(`${baseUrl}/questions/${idQuestion}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        console.log("Success:", response);
+      
         const data = response.data.data;
         document.getElementById("pertanyaan-edit").value = data.pertanyaan;
         document.getElementById("id-question").value = data.id;

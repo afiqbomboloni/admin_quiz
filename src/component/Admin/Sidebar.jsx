@@ -5,8 +5,6 @@ const Sidebar = () => {
   const [linkIsActive, setLinkIsActive] = useState(true);
   const [linkIsActive2, setLinkIsActive2] = useState(true);
 
-  console.log(linkIsActive);
-  console.log(linkIsActive2);
 
 
   return (

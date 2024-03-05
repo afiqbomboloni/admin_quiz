@@ -8,7 +8,10 @@ import EditQuiz from './component/Admin/EditQuiz'
 import DetailQuiz from './component/Admin/DetailQuiz'
 import Reports from './component/Admin/Reports'
 
+
 export default function App() {
+
+
   return (
     <div className='App'>
       <Routes>

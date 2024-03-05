@@ -2,11 +2,12 @@ import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
+import config from "../../../config";
 
 const CreateQuiz = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const baseUrl = "http://localhost:8080/v1/quizzes";
+  const baseUrl = config.BASE_URL;
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ const handleSubmit = (e) => {
     waktu_mulai: start_date,
     waktu_selesai: end_date,
   };
-  fetch(baseUrl, {
+  fetch(`${baseUrl}/quizzes`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -32,7 +33,7 @@ const handleSubmit = (e) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("Success:", data);
+      
       alert("Quiz created successfully")
       navigate("/");
     })

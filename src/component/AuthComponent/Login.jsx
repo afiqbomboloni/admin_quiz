@@ -1,9 +1,13 @@
 import axios from "axios"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import config from "../../../config";
+
+
 
 const Login = () => {
-  const baseUrl = "http://localhost:8080/v1"
+  
+  const baseUrl = config.BASE_URL
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -55,7 +59,7 @@ const Login = () => {
           </div>
           <button className="bg-green-500 hover:bg-green-700 text-white uppercase text-sm font-semibold px-4 py-2 rounded" type="submit">Login</button>
         </form>
-        <a className="text-blue-700 text-center text-sm" href="/login">Belum punya akun?</a>
+ 
       </div>
     </div>
   )

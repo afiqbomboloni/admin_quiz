@@ -6,10 +6,11 @@ import eyeSvg from "../../assets/eye-svgrepo-com.svg";
 import editSvg from "../../assets/edit.svg";
 import deleteSvg from "../../assets/delete.svg";
 import Sidebar from "./Sidebar";
+import config from "../../../config";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const baseUrl = "http://localhost:8080/v1/quizzes?isNotExpired=false";
+  const baseUrl = config.BASE_URL;
   const token = localStorage.getItem("token");
   const [quizzes, setQuizzes] = useState([]);
   const redirectToCreateQuiz = () => {
@@ -17,7 +18,7 @@ const Dashboard = () => {
   };
 
   const getQuizzes = () => {
-    fetch(baseUrl, {
+    fetch(`${baseUrl}/quizzes?isNotExpired=false`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -26,7 +27,7 @@ const Dashboard = () => {
     })
       .then((response) => response.json())
       .then((responseData) => {
-        console.log("Success:", responseData);
+       
         if (Array.isArray(responseData.data)) {
           setQuizzes(responseData.data);
         } else {
@@ -42,7 +43,7 @@ const Dashboard = () => {
     
     event.preventDefault();
     if (window.confirm("Are you sure you want to delete this quiz?")) {
-      fetch(`${baseUrl}/${id}`, {
+      fetch(`${baseUrl}/quizzes/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +52,7 @@ const Dashboard = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Success:", data);
+          
           alert("Quiz deleted successfully");
           getQuizzes();
         })
@@ -78,9 +79,7 @@ const Dashboard = () => {
     getQuizzes();
   }, []);
 
-  quizzes.map((quiz) => {
-    console.log(quiz);
-  })
+
 
   return (
     <div className="flex h-screen">

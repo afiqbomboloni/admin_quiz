@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react"
 import Sidebar from "./Sidebar"
 import { parse } from "date-fns"
+import config from "../../../config"
 
 const Reports= () => {
+    const baseUrl = config.BASE_URL
     const [data, setData] = useState([])
     const [dataEdit, setDataEdit] = useState([{}])
 
@@ -35,12 +37,7 @@ const Reports= () => {
           return
       } 
         
-        // const idJawabanPeserta = event.target.elements['id-jawaban-peserta'].value;
-        // console.log(skor, idJawabanPeserta);
-        console.log(skor, id_user, id_quiz)
-        let typeDataid_user = typeof id_user
-        console.log('typeDataid_user:', typeDataid_user)
-        fetch('http://localhost:8080/v1/answers/skor',{
+        fetch(`${baseUrl}/answers/skor`,{
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -55,7 +52,7 @@ const Reports= () => {
         })
         .then((response) => response.json())
         .then((responseData) => {
-            console.log('Success:', responseData)
+            
             if (responseData.message === 'jawaban_peserta updated') {
                 alert('Skor berhasil diupdate')
                 toggleModalEdit()
@@ -70,7 +67,7 @@ const Reports= () => {
       }
 
       const fetchJawabanPesertaById = (id) => {
-        fetch(`http://localhost:8080/v1/answers/${id}`, {
+        fetch(`${baseUrl}/answers/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -78,10 +75,10 @@ const Reports= () => {
         })
         .then((response) => response.json())
         .then((responseData) => {
-            console.log('Success:', responseData)
+            
             if (responseData.message === 'success') {
                 const jawabanPeserta = responseData.data
-                console.log('responseData.data:', responseData.data) 
+                
                 const idJawabanPeserta = jawabanPeserta.id
                 const idQuiz = jawabanPeserta.id_quiz
                 const idUser = jawabanPeserta.id_user
@@ -104,7 +101,7 @@ const Reports= () => {
       
     }
     const fetchData = () => {
-        fetch('http://localhost:8080/v1/answer-users', {
+        fetch(`${baseUrl}/answer-users`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -112,7 +109,7 @@ const Reports= () => {
         })
         .then((response) => response.json())
         .then((responseData) => {
-            console.log('Success:', responseData)
+            
             if (Array.isArray(responseData.data)) {
                 setData(responseData.data)
             } else {
